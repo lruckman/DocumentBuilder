@@ -5,16 +5,12 @@ namespace DocumentBuilder.Dossiers
 {
     public class ClientCopy : Dossier
     {
-        public ClientCopy(RouteContext routeContext) : base(routeContext)
+        public ClientCopy(RequestContext requestContext) : base(requestContext)
         {
-            foreach (var orderLocation in RouteContext.Order.OrderLocations)
+            foreach (var location in RequestContext.Locations)
             {
-                Documents.Add(new CoverSheet(RouteContext));
-                //Documents.Add(new Page1(RouteContext, orderLocation));
-                //Documents.Add(new Page2(RouteContext, orderLocation));
+                Documents.Add(new W4(RequestContext));
             }
-
-            var foo = Documents;
         }
     }
 }

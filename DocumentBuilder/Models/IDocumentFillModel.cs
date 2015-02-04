@@ -1,6 +1,6 @@
 ﻿namespace DocumentBuilder.Models
 {
-    public class OrderLocation
+    internal interface IDocumentFillModel
     {
     }
 }

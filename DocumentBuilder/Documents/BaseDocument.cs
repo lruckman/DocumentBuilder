@@ -4,30 +4,30 @@ using System.Linq;
 using DocumentBuilder.Models;
 using iTextSharp.text.pdf;
 
-namespace DocumentBuilder
+namespace DocumentBuilder.Documents
 {
     public interface IDocument
     {
-        DocumentResult Compose();
+        IDocumentResult Compose();
     }
 
-    public abstract class Document : IDocument
+    public abstract class BaseDocument<TRequestContext> : IDocument
     {
-        internal readonly RouteContext RouteContext;
+        internal readonly TRequestContext RequestContext;
         private readonly string _sourceFileName;
 
-        protected Document(string sourceFileName, RouteContext routeContext)
+        protected BaseDocument(string sourceFileName, TRequestContext requestContext)
         {
             _sourceFileName = sourceFileName;
-            RouteContext = routeContext;
+            RequestContext = requestContext;
         }
 
-        public DocumentResult Compose()
+        public IDocumentResult Compose()
         {
             return SetFields(Prepare());
         }
 
-        private DocumentResult SetFields(IDocumentFieldsModel model)
+        private IDocumentResult SetFields(IDocumentFillModel model)
         {
             using (var reader = new PdfReader(ExtractResource(_sourceFileName)))
             {
@@ -44,38 +44,57 @@ namespace DocumentBuilder
                             .Where(x => Attribute.IsDefined(x, typeof (StampAttribute), false))
                             .ToArray())
                         {
-                            var stamp =
-                                propertyInfo.GetCustomAttributes(typeof (StampAttribute), false).First() as
-                                    StampAttribute;
+                            var stamp = (StampAttribute) propertyInfo
+                                .GetCustomAttributes(typeof (StampAttribute), false)
+                                .First();
+
                             var propertyType = propertyInfo.PropertyType;
+                            var propertyName = propertyType.Name.ToUpperInvariant();
                             var value = propertyInfo.GetValue(model);
 
-                            if (propertyType.Name.Equals("datetime", StringComparison.OrdinalIgnoreCase))
+                            if (String.IsNullOrWhiteSpace(Convert.ToString(value)))
+                            {
+                                continue;
+                            }
+
+                            if (propertyName == "DATETIME")
                             {
                                 var dateValue = DateTime.Parse(value.ToString());
                                 if (dateValue != DateTime.MinValue)
+                                {
                                     pdfStamper.AcroFields.SetField(stamp.FieldName, dateValue.ToString(stamp.Format));
+                                }
+                                continue;
                             }
-                            else if (propertyType.Name.Equals("bool", StringComparison.OrdinalIgnoreCase) ||
-                                     propertyType.Name.Equals("boolean", StringComparison.OrdinalIgnoreCase))
+
+                            if (propertyName == "BOOL" || propertyName == "BOOLEAN")
                             {
                                 pdfStamper.AcroFields.SetField(stamp.FieldName,
                                     bool.Parse(value.ToString()) ? "Yes" : "No");
+
+                                continue;
                             }
-                            else if (propertyType.Name.Equals("int32", StringComparison.OrdinalIgnoreCase))
-                            {
-                                pdfStamper.AcroFields.SetField(stamp.FieldName, value.ToString());
-                            }
-                            else if (propertyType.Name.Equals("decimal", StringComparison.OrdinalIgnoreCase))
-                            {
-                                var decimalValue = decimal.Parse(value.ToString());
-                                pdfStamper.AcroFields.SetField(stamp.FieldName, decimalValue.ToString(stamp.Format));
-                            }
-                            else
+
+                            if (propertyName == "INT32")
                             {
                                 pdfStamper.AcroFields.SetField(stamp.FieldName,
-                                    value == null ? string.Empty : value as string);
+                                    value.ToString());
+
+                                continue;
                             }
+
+                            if (propertyName == "DECIMAL")
+                            {
+                                var decimalValue = decimal.Parse(value.ToString());
+
+                                pdfStamper.AcroFields.SetField(stamp.FieldName,
+                                    decimalValue.ToString(stamp.Format));
+
+                                continue;
+                            }
+
+                            pdfStamper.AcroFields.SetField(stamp.FieldName,
+                                value == null ? string.Empty : value as string);
                         }
 
                         pdfStamper.Close();
@@ -101,6 +120,17 @@ namespace DocumentBuilder
             }
         }
 
-        internal abstract IDocumentFieldsModel Prepare();
+        internal abstract IDocumentFillModel Prepare();
+    }
+
+    public abstract class BaseDocument<TRequestContext, TDataContext> : BaseDocument<TRequestContext>
+    {
+        internal readonly TDataContext DataContext;
+
+        protected BaseDocument(string sourceFileName, TRequestContext requestContext, TDataContext dataContext)
+            : base(sourceFileName, requestContext)
+        {
+            DataContext = dataContext;
+        }
     }
 }

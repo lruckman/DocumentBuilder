@@ -7,11 +7,11 @@ namespace DocumentBuilder.Console
     {
         private static void Main(string[] args)
         {
-            var document = Factory.Generate<ClientCopy>(new RouteContext
+            var document = Factory.Generate<ClientCopy>(new RequestContext
             {
-                Order = new Order
-                {
-                    OrderLocations = new[] {new OrderLocation()}
+                Locations = new [] { 
+                    new LocationContext(),
+                    new LocationContext() 
                 }
             });
 
