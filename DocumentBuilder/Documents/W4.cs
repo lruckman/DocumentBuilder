@@ -2,9 +2,9 @@
 
 namespace DocumentBuilder.Documents
 {
-    public class W4 : BaseDocument<RequestContext>
+    public class W4 : BaseDocument<Request>
     {
-        public W4(RequestContext routeContext)
+        public W4(Request routeContext)
             : base("DocumentBuilder.Documents.Source.fw4.pdf", routeContext)
         {
         }
@@ -16,6 +16,7 @@ namespace DocumentBuilder.Documents
 
         public class CoverSheetModel : IDocumentFillModel
         {
+
         }
     }
 }

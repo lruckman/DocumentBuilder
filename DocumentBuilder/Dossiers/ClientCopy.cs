@@ -3,9 +3,10 @@ using DocumentBuilder.Models;
 
 namespace DocumentBuilder.Dossiers
 {
-    public class ClientCopy : Dossier
+    public class ClientCopy : Dossier<Request>
     {
-        public ClientCopy(RequestContext requestContext) : base(requestContext)
+        public ClientCopy(Request requestContext) 
+            : base(requestContext)
         {
             foreach (var location in RequestContext.Locations)
             {

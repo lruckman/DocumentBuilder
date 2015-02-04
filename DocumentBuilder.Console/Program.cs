@@ -1,5 +1,4 @@
-﻿using DocumentBuilder.Dossiers;
-using DocumentBuilder.Models;
+﻿using DocumentBuilder.Models;
 
 namespace DocumentBuilder.Console
 {
@@ -7,11 +6,12 @@ namespace DocumentBuilder.Console
     {
         private static void Main(string[] args)
         {
-            var document = Factory.Generate<ClientCopy>(new RequestContext
+            var document = Factory.GenerateClientCopy(new Request
             {
-                Locations = new [] { 
-                    new LocationContext(),
-                    new LocationContext() 
+                Locations = new[]
+                {
+                    new Location(),
+                    new Location()
                 }
             });
 

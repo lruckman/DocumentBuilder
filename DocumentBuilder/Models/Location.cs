@@ -1,6 +1,6 @@
 ﻿namespace DocumentBuilder.Models
 {
-    public class LocationContext
+    public class Location
     {
     }
 }

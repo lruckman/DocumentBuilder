@@ -48,11 +48,11 @@
     <Compile Include="Documents\W4Alt.cs" />
     <Compile Include="Models\DocumentResult.cs" />
     <Compile Include="Models\IDocumentFillModel.cs" />
-    <Compile Include="Models\LocationContext.cs" />
+    <Compile Include="Models\Location.cs" />
     <Compile Include="Dossiers\ClientCopy.cs" />
     <Compile Include="Documents\W4.cs" />
     <Compile Include="Factory.cs" />
-    <Compile Include="Models\RequestContext.cs" />
+    <Compile Include="Models\Request.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StampAttribute.cs" />
   </ItemGroup>
