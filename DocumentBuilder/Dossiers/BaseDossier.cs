@@ -8,16 +8,16 @@ using Document = iTextSharp.text.Document;
 
 namespace DocumentBuilder.Dossiers
 {
-    public interface IDossier
+    public interface IBaseDossier
     {
         IDocumentResult Compose();
     }
 
-    public abstract class Dossier<TRequestContext> : IDossier
+    public abstract class BaseDossier<TRequestContext> : IBaseDossier
     {
         internal readonly TRequestContext RequestContext;
 
-        protected Dossier(TRequestContext requestContext)
+        protected BaseDossier(TRequestContext requestContext)
         {
             RequestContext = requestContext;
             Documents = new List<IDocument>();

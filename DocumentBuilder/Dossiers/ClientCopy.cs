@@ -3,7 +3,7 @@ using DocumentBuilder.Models;
 
 namespace DocumentBuilder.Dossiers
 {
-    public class ClientCopy : Dossier<Request>
+    public class ClientCopy : BaseDossier<Request>
     {
         public ClientCopy(Request requestContext) 
             : base(requestContext)

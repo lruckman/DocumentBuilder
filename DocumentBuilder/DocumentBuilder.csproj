@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Documents\BaseDocument.cs" />
-    <Compile Include="Dossiers\Dossier.cs" />
+    <Compile Include="Dossiers\BaseDossier.cs" />
     <Compile Include="Documents\W4Alt.cs" />
     <Compile Include="Models\DocumentResult.cs" />
     <Compile Include="Models\IDocumentFillModel.cs" />

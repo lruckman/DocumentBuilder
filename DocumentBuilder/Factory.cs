@@ -7,9 +7,9 @@ namespace DocumentBuilder
     public class Factory
     {
         //public static IDocumentResult Generate<TDossier, TRequestContext>(TRequestContext requestContext)
-        //    where TDossier : IDossier<TRequestContext>
+        //    where TDossier : IBaseDossier<TRequestContext>
         //{
-        //    return ((IDossier)Activator.CreateInstance(typeof(TDossier), requestContext)).Compose();
+        //    return ((IBaseDossier)Activator.CreateInstance(typeof(TDossier), requestContext)).Compose();
         //}
 
         public static IDocumentResult GenerateClientCopy(Request requestContext)
